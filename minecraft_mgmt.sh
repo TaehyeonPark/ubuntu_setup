@@ -1,4 +1,3 @@
-root@ubnutu0a:/home/minecraft/tools# cat mgmt.sh
 #!/bin/bash
 OS_type="ubuntu
 centos
@@ -74,3 +73,12 @@ do
                 "clear")
                         clear
                         ;;
+                *)
+                        echo ">> unknwon command."
+                        ;;
+        esac
+done
+
+echo ">>> mgmt.sh finished."
+
+helpme () { echo "$HELP"; }
