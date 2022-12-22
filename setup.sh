@@ -1,4 +1,3 @@
-#!/bin/bash
 DIR="/home/minecraft"
 if [ -d "$DIR" ]; then
         echo "$DIR already exists"
