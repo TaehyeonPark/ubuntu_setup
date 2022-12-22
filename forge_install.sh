@@ -2,8 +2,12 @@
 cd /home/minecraft
 #URL="https://maven.minecraftforge.net/net/minecraftforge/forge/1.19.2-43.2.1/forge-1.19.2-43.2.1-installer.jar"
 URL="https://maven.minecraftforge.net/net/minecraftforge/forge/1.12.2-14.23.5.2860/forge-1.12.2-14.23.5.2860-installer.jar"
+
+
+TMP=($(echo $URL | tr "/" "\n"))
 MODE="server"
-FILENAME="forge_$MODE.jar"
+FILENAME=${TMP[-1]}
+
 echo "installer : saved as $FILENAME"
 wget -O $FILENAME $URL
 if [ $MODE=="server" ]; then
