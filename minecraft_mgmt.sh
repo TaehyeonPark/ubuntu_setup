@@ -70,6 +70,21 @@ do
                         sudo ufw allow $PORT
                         echo ">>>> ufw configuration complete."
                         ;;
+                "1")
+                        echo "type memsize default(20G, MAX=20G)"
+                                read mem
+                                #if [ -z "${mem}" || $((mem)) > 20 ]
+                                if [ -z "${mem}" ] || [ `expr $mem` -gt 20 ]
+                                then
+                                        echo "start minecraft server."
+                                        echo "java -Xms1024M -Xmx20G -jar server.jar nogui"
+                                        java -Xms1024M -Xmx20G -jar server.jar nogui
+                                else
+                                        echo "$((mem))G will be allocated"
+                                        echo "java -Xms1024M -Xmx${mem}G -jar server.jar nogui"
+                                        java -Xms1024M -Xmx${mem}G -jar server.jar nogui
+                                fi
+                        ;;
                 "clear")
                         clear
                         ;;
