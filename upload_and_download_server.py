@@ -12,7 +12,7 @@ destination="/download/"
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('upload_and_download_page.html')
 
 @app.route('/upload', methods=['POST'])
 def upload():
