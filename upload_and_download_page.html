@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/style.css" type="text/css">
+    <title>Upload</title>
+  </head>
+  <body>
+        <div class="download_btn" style="border: 10px solid #000; border-radius: 15px;">
+                <button name="download" onclick="onClickRefresh()" style="width: 100%;height: 50px;">Download refresh</button>
+        </div>
+        <div class="download_template_style" style="border: 10px solid #000; border-radius: 15px;">
+        </div>
+        <div class="Basic_template_style1" style="border: 10px solid #000; border-radius: 15px;">
+                <input class="upload_input" type="file" style="display: block;">
+        </div>
+  </body>
+</html>
+
+<script>
+    function onClickRefresh(){
+        var xhr = new XMLHttpRequest();
+        xhr.open('GT', '/download', true);
+        fetch("/download")
+        .then(response => {
+                let data = response.json();
+                data.then(rtn => {
+                        var file_list = rtn['files'];
+                        doc = document.getElementsByClassName('download_template_style')[0];
+                        content = document.createElement('div');
+                        content.innerHTML = file_list;
+                        console.log(content.innerHTML);
+                        doc.innerHTML = content.innerHTML;
+                })
+        });
+
+    }
+
+
+    function onClickFileUpload(){
+        var file = document.getElementById('file');
+        file.click();
+    }
+
+    let inputFile = document.querySelector('.upload_input[type="file"]');
+    let uploadBox = document.querySelector('.Basic_template_style1');
+
+    /* 박스 안에 Drag 들어왔을 때 */
+    uploadBox.addEventListener('dragenter', function(e) {
+    });
+
+    /* 박스 안에 Drag를 하고 있을 때 */
+    uploadBox.addEventListener('dragover', function(e) {
+        e.preventDefault();
+    });
+
+    /* 박스 밖으로 Drag가 나갈 때 */
+    uploadBox.addEventListener('dragleave', function(e) {
+        this.style.backgroundColor = 'white';
+    });
+
+      /* 박스 안에서 Drag를 Drop했을 때 */
+      uploadBox.addEventListener('drop', function(e) {
+        e.preventDefault();
+        console.log('drop');
+        let files = e.dataTransfer.files;
+        console.log(files);
+        let formData = new FormData();
+        for (let i = 0; i < files.length; i++) {
+            formData.append(i, files[i]);
+        }
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', '/upload');
+        xhr.send(formData);
+        xhr.onload = function() {
+            console.log(xhr.responseText);
+        }
+    });
+
+</script>
+
+<style>
+body {
+    margin: 0;
+    height: 100%;
+    background-image: linear-gradient(to top, #d9afd9 0%, #97d9e1 100%);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+}
+.upload_box{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.Basic_template {
+    font-size: 1.3em;
+    background-color: #000;
+    border-radius: 15px;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+.Basic_template_style0 {
+    /* font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; */
+    font-size: 2em;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+}
+.Basic_template_style1 {
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    color: #fff;
+    text-align: center;
+    padding: 100px;
+    margin: 10%;
+    background-color: #1c2845;
+}
+.Basic_template_style1:hover{
+    background-color: #d3cbff;
+    color: #000;
+    border-radius: 15px;
+    transition: 0.5s;
+}
+.Basic_template_style0 {
+    /* font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; */
+    font-size: 2em;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+}
+.Basic_template_style1 {
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    color: #fff;
+    text-align: center;
+    padding: 100px;
+    margin: 10%;
+    background-color: #1c2845;
+}
+.Basic_template_style1:hover{
+    background-color: #d3cbff;
+    color: #000;
+    border-radius: 15px;
+    transition: 0.5s;
+}
+</style>
