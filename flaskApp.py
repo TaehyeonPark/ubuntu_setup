@@ -1,3 +1,4 @@
+#-*- coding: utf-8 -*-
 from flask import *
 from flask_compress import *
 from flask_cors import *
