@@ -8,7 +8,7 @@ app.secret_key = os.urandom(24)
 Compress(app)
 CORS(app)
 #path = "/backups"
-path = "/download/"
+path = "/download"
 destination="/download/"
 
 @app.route('/')
