@@ -7,7 +7,8 @@ app = Flask(__name__, template_folder='viewer')
 app.secret_key = os.urandom(24)
 Compress(app)
 CORS(app)
-path = "/backups"
+#path = "/backups"
+path = "/download/"
 destination="/download/"
 
 @app.route('/')
