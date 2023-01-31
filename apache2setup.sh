@@ -41,7 +41,7 @@ cd ../../httpd-2.4.55/
 make && make install
 cd ../
 
-ln -s /usr/local/apache24/bin/httpd /usr/local/bin/httpd
+ln -s /usr/local/apache2/bin/httpd /usr/local/bin/httpd
 ln -s /usr/local/apache2 /httpd
 mv /usr/local/apache2/htdocs /var/www
 ln -s /var/www /usr/local/apache2/htdocs
