@@ -37,6 +37,7 @@ h : help
 5 : automaticaly stop server, detatch active screen, cleanup backups, backup the world, start server.
 6 : reattach server.
 7 : detatch server.
+8 : start velocity.
 clear : clear command lines.
 ************
 "
@@ -81,7 +82,7 @@ setup() {
                 echo "invalid parameter."
                 ;;
         esac
-        
+
 }
 
 setup_all() {
@@ -110,6 +111,23 @@ download_file() {
         echo ">>>> download complete."
 }
 
+
+file_exist() {
+        if [ -f "$1" ]; then
+                return 0
+        else
+                return 1
+        fi
+}
+
+directory_exist() {
+        if [ -d "$1" ]; then
+                return 0
+        else
+                return 1
+        fi
+}
+
 dir_disk_size() {
         du_ret=$(du -sb "$1")
         spilt=($(echo "$du_ret" | tr " /" "\n"))
@@ -119,7 +137,12 @@ dir_disk_size() {
 
 backup_server() {
         echo "[$(date +%Y%m%d-%H%M%S)] backuping..."
-        tar -cvpzf /backups/world-$(date +%F-%H-%M).tar.gz ./world/
+        if directory_exist "./backups"; then
+                echo "./backups/ found."
+        else
+                mkdir "backups"
+        fi
+        tar -cvpzf ./backups/world-$(date +%F-%H-%M).tar.gz ./world/
         echo "[$(date +%Y%m%d-%H%M%S)] backuped."
 }
 
@@ -127,14 +150,6 @@ remove_latest() {
         echo "[$(find $dir -name "$pattern" -printf '%T+ %p\n' | sort | head -n 1)] will be deleted."
         rm -rf $(find $dir -name "$pattern" -printf '%T+ %p\n' | sort | head -n 1)
         echo "Removing success."
-}
-
-file_exist() {
-        if [ -f "$1" ]; then
-                return 0
-        else
-                return 1
-        fi
 }
 
 cleanup_disk() {
@@ -166,15 +181,15 @@ start_server() {
 
         echo ">>>> type memsize default(4G, MAX=4G)"
         read mem
-        
+
         if [ -z "${mem}" ] || [ $(expr $mem) -gt 20 ] || [ $(expr $mem) -lt 1 ]; then
                 mem=$default_mem
         fi
-        
+
         echo "$((mem))G will be allocated"
         echo "start minecraft server."
-        comm="java -Xms1024M -Xmx${mem}G -jar server.jar nogui"
-        eval "screen -dmS $MINECRAFT_SERVER_SCREEN $comm"
+
+        eval "screen -dmS $MINECRAFT_SERVER_SCREEN java -Xms1024M -Xmx${mem}G -jar server.jar nogui"
 }
 
 auto_start_server() {
@@ -308,10 +323,15 @@ while ! [ "$QUERY" == "q" ]; do
                 screen -ls
                 if [ $? -eq 0 ]; then
                         echo ">> no screen available."
+                        continue
                 else
                         read -p ">> enter screen name: " screen_name
                         detatch_server $screen_name
                 fi
+                ;;
+        "8")
+                echo ">> start velocity."
+                start_velocity
                 ;;
         "clear")
                 clear
